@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Premantel - A Malware analysis and Threat Intel Framework</title>
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+	    <link href='https://fonts.googleapis.com/css?family=Chango' rel='stylesheet'>
+		<link href='https://fonts.googleapis.com/css?family=Allerta' rel='stylesheet'>
+
+
+<style type="text/css">
+body {
+     background-color: #333333;
+     font-family: 'Allerta';
+}
+	div{
+  background-color: #333333;
+  color: #cccccc ;
+}
+
+
+
+
+.gtext3 {
+          color: #042352;
+          text-shadow: 0px 1px 0px blue;
+          font-size: 90%;
+         }
+ .gtextgreen {
+          color: #00ff00;
+          text-shadow: 0px 1px 0px #00ff00;
+          font-size: 90%;
+         }
+
+.gtext {
+        color: #ff1a1a;
+        text-shadow: 0px 1px 0px #ff1a1a;
+        font-size: 90%;
+       }
+#AvCaesorcollapse {
+                     overflow-y:auto;
+                     height:150px;
+                  }
+#vtjotticollapse {
+                    overflow-y:auto;
+                    height:150px;
+                 }
+#Metadefendercollapse {
+                        overflow-y:auto;
+                        height:150px;
+                       }
+ #commonadditionalfileinfocollapse{
+                                    overflow-y:auto;
+                                    height:400px;
+                                   }
+#commonfeeds{
+	overflow-y:auto;
+	height:200px;
+}
+ #vtcollapse{
+                overflow-y:auto;
+                height:400px;
+              }
+#vtadditionalfileinfocollapse{
+                                              overflow-y:auto;
+                                              height:400px;
+                                            }
+ #shadowservercollapse {
+                                              overflow-y:auto;
+                                              height:150px;
+                        }
+#IBMxForceExchange {
+                                              overflow-y:auto;
+                                              height:150px;
+                                            }
+#Urlquerynetcollapse {
+                                              overflow-y:auto;
+                                              height:200px;
+                                            }
+#GoogleSafeBrowsecollapse{
+                          overflow-y:auto;
+                          height:100px;
+                        }
+ #Cymoncollapse {
+                                              overflow-y:auto;
+                                              height:400px;
+                                            }
+#IBMxForceIPcollapse {
+                                              overflow-y:auto;
+                                              height:400px;
+                                            }
+
+</style>
+
+</head>
+<body>
+	<div class="container"  style="width:90%" >
+		<div class="text-center" style="color: #428bca; font-family: 'Chango'"><h2> Premantel - A Malware analysis and Threat Intel Framework </h2> </div>
+		<ul class="nav nav-tabs" id="maintab">
+             <li><a href="#scan" data-toggle="tab">Scan</a> </li>
+             <li><a href="#search" data-toggle="tab">Search</a> </li>
+             <li><a href="#iocsearch" data-toggle="tab">IOC Search</a> </li>
+        </ul> <!-- end of tab options ul-->
+        <div class="tab-content">
+        	<div class="tab-pane active" id="scan">
+        		<div class="container" style="width:60%" >
+	               <form  class="form-horizontal" enctype="multipart/form-data" action="/" method="post">
+	                 <div class="form-group">
+	                   <input type="file" name="upfile" style="visibility:hidden;" id="scanfile" />
+	                   <label for="subfile">Choose A File</label>
+	                   <div class="form-group input-append">	<!-- This input is here purely for cosmetic reasons. The actual file is uploaded from the hidden input box !-->
+	                     <input type="text" name="filepath" id="subfile" class="input-xlarge form-control" placeholder="FilePath Comes here !">
+	                     <a class="btn btn-primary form-control" onclick="$('#scanfile').click();">Select File</a>
+	                     <div class="form-row justify-content-md-center"><p></p></div>
+	                     <button type="submit" class="btn btn-success form-control">Upload</button>
+	                   </div>
+	                 </div>
+	               </form>
+          		</div>
+          		<div class="container" style="width:100%" id="avcontainer">
+          			<div class="row">
+          				<div class="col-sm-4" id="avcasesarpanel">
+			                 <div class="panel panel-default">
+				                  <div class="panel-heading">
+				                    <h4 class="panel-title gtext3">
+				                     	<a data-toggle="collapse" href="#AvCaesorcollapse">AvCaesor</a>
+				                    </h4>
+				                  </div>
+				                  <div id="AvCaesorcollapse" class="panel-collapse collapse in">
+				                    <table class="table  ">
+				                        <thead>
+				                          <tr>
+				                            <th>AV Engine</th>
+				                            <th>Result</th>
+				                          </tr>
+				                        </thead>
+				                      <tbody>
+				                        {{range $index, $element := .AvCaesorAVEngineResult}}
+				                          <tr>
+				                            <td class="gtextblk"><p> {{$index}}</p></td>
+				                            <td class="gtext"><p>{{$element}}</p></td>
+				                          </tr>
+				                        {{end}}
+				                      </tbody>
+				                    </table>
+				                  </div>
+			               </div>
+              			</div> <!--end of avcasesarpanel column-->
+              			<div class="col-sm-4" id="Jotti">
+				              <div class="panel panel-default">
+				                <div class="panel-heading">
+				                  <h4 class="panel-title gtext3">
+				                    <a data-toggle="collapse" href="#vtjotticollapse">Virusscan.Jotti</a>
+				                  </h4>
+				                </div>
+				                 <div id="vtjotticollapse" class="panel-collapse collapse in">
+				                   <table class="table  ">
+				                       <thead>
+				                         <tr>
+				                           <th>AV Engine</th>
+				                           <th>Result</th>
+				                       	 </tr>
+				                       </thead>
+				                     <tbody>
+				                       {{range $index, $element := .Jottiscanres}}
+				                         <tr>
+				                           <td class="gtextblk"><p> {{$index}}</p></td>
+				                           <td class="gtext"><p>{{$element}}</p></td>
+				                         </tr>
+				                       {{end}}
+				                   	 </tbody>
+				                   </table>
+				                 </div>
+				              </div>
+            			</div> <!--end of Jotti column-->
+            			 <div class="col-sm-4">
+				            <div class="panel panel-default">
+				                <div class="panel-heading">
+				                  <h4 class="panel-title gtext3">
+				                    <a data-toggle="collapse" href="#Metadefendercollapse">Metadefender</a>
+				                  </h4>
+				                </div>
+				                 <div id="Metadefendercollapse" class="panel-collapse collapse in">
+				                   <table class="table  ">
+				                       <thead>
+				                         <tr>
+				                           <th>AV Engine</th>
+				                           <th>Result</th>
+				                       </tr>
+				                     </thead>
+				                     {{range $index, $element := .MetaScanres}}
+				                       <tr>
+				                         <td class="gtextblk"><p> {{$index}}</p></td>
+				                         <td class="gtext"><p>{{$element}}</p></td>
+				                       </tr>
+				                     {{end}}
+				                   </table>
+
+				                 </div>
+				               </div>
+          			    </div>
+          			</div> <!--end of av container row-->
+          			<div class="row">
+			              <div class="col-sm-2">
+			              </div>
+			              <div class="col-sm-8">
+			                <div class="panel panel-default">
+			                  <div class="panel-heading">
+			                    <h4 class="panel-title gtext3">
+			                      <a data-toggle="collapse" href="#commonadditionalfileinfocollapse">Additional file Information.</a>
+			                    </h4>
+			                  </div>
+			                   <div id="commonadditionalfileinfocollapse" class="panel-collapse collapse in">
+			                   <table class="table">
+			                         <tbody>
+			                         {{range $index, $element := .AvCaesorAVFileInfoResult}}
+			                           <tr>
+			                             <td class="gtextblk"><p> {{$index}}</p></td>
+			                             <td class="gtextgreen"><p>{{$element}}</p></td>
+			                           </tr>
+			                         {{end}}
+			                       </tbody>
+			                     </table>
+			                   </div>
+			                 </div>
+			              </div>
+			              <div class="col-sm-2">
+			              </div>
+           		    </div>  <!--end of additional file info row-->
+          		</div><!-- end of avcontainer div-->
+
+        	</div> <!-- end of tab-pane scan div-->
+        	<div class="tab-pane" id="search">
+        		<div class="row"><p></p></div> <!-- end of blank row div-->
+	        	<div class="container" style="width:75%" >
+	              		<form class="form-horizontal" action="" method="post">
+	                		<div class="form-group">
+		                  		<label for="search">Enter URL/MD5</label>
+		                  		<input type="text" name="search" class="form-control" id="search"  placeholder="Search URL/MD5">
+		                  		<div class="form-row justify-content-md-center"><p></p></div>
+		                  		<button type="submit" class="btn btn-primary form-control">Search</button>
+	                		</div>
+	              		</form>
+	             </div>
+	             <div class="row" id="vtandfileinfo">
+	             	<div class="col-sm-6">
+		                  <div class="container" style="width:100%" >
+		                      <div class="panel panel-default">
+		                        <div class="panel-heading">
+		                          <h4 class="panel-title gtext3">
+		                            <a data-toggle="collapse" href="#vtcollapse">Virus Total</a>
+		                          </h4>
+		                        </div>
+		                         <div id="vtcollapse" class="panel-collapse collapse in">
+		                           <table class="table  ">
+		                               <thead>
+		                                 <tr>
+		                                   <th>AV Engine</th>
+		                                   <th>Result</th>
+		                                 </tr>
+		                               </thead>
+		                               <tbody>
+		                                 {{range $index, $element := .Vtscanres}}
+		                                   <tr>
+		                                     <td class="gtextblk"><p> {{$index}}</p></td>
+		                                     <td class="gtext"><p>{{$element}}</p></td>
+		                                   </tr>
+		                                 {{end}}
+		                               </tbody>
+		                           </table>
+		                         </div>
+		                       </div>
+		                     </div>
+                    </div> <!-- end of vt column div-->
+                     <div class="col-sm-6">
+                        <div class="container" style="width:100%" >
+                            <div class="panel panel-default">
+                              <div class="panel-heading">
+                                <h4 class="panel-title gtext3">
+                                  <a data-toggle="collapse" href="#vtadditionalfileinfocollapse">Additional  file Information.</a>
+                                </h4>
+                              </div>
+                               <div id="vtadditionalfileinfocollapse" class="panel-collapse collapse in">
+                                 <table class="table">
+                                   <tbody>
+                                     {{range $index, $element := .VtUploadedFileInfo}}
+                                       <tr>
+                                         <td class="gtextblk"><p> {{$index}}</p></td>
+                                         <td class="gtextgreen"><p>{{$element}}</p></td>
+                                       </tr>
+                                     {{end}}
+                                   </tbody>
+                                 </table>
+
+                               </div>
+                             </div>
+                        </div>
+                     </div> <!-- end of additional file info  column div-->
+	             </div> <!-- end of vtandfileinfo row div-->
+
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="container" style="width:100%" >
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title gtext3">
+                            <a data-toggle="collapse" href="#IBMxForceExchange">IBMxForceExchange</a>
+                          </h4>
+                        </div>
+                         <div id="IBMxForceExchange" class="panel-collapse collapse in">
+                           <table class="table  ">
+                              <tbody>
+                                 {{range $index, $element := .IBMxForceMalwareReport}}
+                                   <tr>
+                                     <td class="gtextblk"><p> {{$index}}</p></td>
+                                     <td class="gtext"><p>{{$element}}</p></td>
+                                   </tr>
+                                 {{end}}
+                               </tbody>
+                           </table>
+                         </div>
+                       </div>
+                 </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="container" style="width:100%" >
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title gtext3">
+                            <a data-toggle="collapse" href="#shadowservercollapse">ShadowServer</a>
+                          </h4>
+                        </div>
+                         <div id="shadowservercollapse" class="panel-collapse collapse in">
+                           <table class="table  ">
+                               <thead>
+                                 <tr>
+                                   <th>AV Engine</th>
+                                   <th>Result</th>
+                                 </tr>
+                               </thead>
+                               <tbody>
+                                 {{range $index, $element := .ShadowServer}}
+                                   <tr>
+                                     <td class="gtextblk"><p> {{$index}}</p></td>
+                                     <td class="gtext"><p>{{$element}}</p></td>
+                                   </tr>
+                                 {{end}}
+                               </tbody>
+                           </table>
+                         </div>
+                       </div>
+                 </div>
+                </div>
+
+              </div> <!--end of ibm and shadow server row-->
+              <div class="row" id="safebrowseandurlquery">
+              	<div class="col-sm-6">
+                  <div class="container" style="width:100%" >
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title gtext3">
+                            <a data-toggle="collapse" href="#GoogleSafeBrowsecollapse">GoogleSafeBrowse</a>
+                          </h4>
+                        </div>
+                         <div id="GoogleSafeBrowsecollapse" class="panel-collapse collapse in">
+                           <table class="table">
+                               <thead>
+                                 <tr>
+                                   <th>Threat Type</th>
+                                   <th>Platform</th>
+                                   <th>URL</th>
+                                 </tr>
+                               </thead>
+                               <tbody>
+                                 {{range $index, $element := .GoogleSafeBrowse}}
+                                   <tr>
+                                      {{range $element}}
+                                        <td class="gtext"><p>{{.}}</p></td>
+                                      {{end}}
+                                   </tr>
+                                 {{end}}
+                             </tbody>
+                           </table>
+                         </div>
+                       </div>
+                 </div>
+                </div>
+                <div class="col-sm-6">
+                 <div class="container" style="width:100%" >
+                     <div class="panel panel-default">
+                       <div class="panel-heading">
+                         <h4 class="panel-title gtext3">
+                           <a data-toggle="collapse" href="#Urlquerynetcollapse">Urlquery.net</a>
+                         </h4>
+                       </div>
+                       <div id="Urlquerynetcollapse" class="panel-collapse collapse in">
+                          <table class="table  ">
+                              <thead>
+                                <tr>
+                                  <th>Source</th>
+                                  <th>Result</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {{range $index, $element := .Urlquerynetsearch}}
+                                <tr>
+                                  <td class="gtextblk"><p>{{$index}}</p></td>
+                                   <td class="gtext"><p>{{$element}}</p></td>
+                                  </tr>
+                                {{end}}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                </div>
+               </div>
+              </div> <!-- end of safebrowseandurlquery div-->
+
+        	</div> <!-- end of tab-pane search div-->
+        	<div class="tab-pane" id="iocsearch">
+        		<div class="row"><p></p></div>
+        		<div class="row">
+        			<div class="col-sm-6">
+		        		<div class="container" style="width:75%" >
+				              <form class="form-horizontal" action="" method="post">
+				                <div class="form-group">
+				                  <label for="search">Search Domain/IP</label>
+				                  <input type="text" name="iocsearch" class="form-control" id="iocsearch"  placeholder="Search Domain/IP">
+				                  <div class="form-row justify-content-md-center"><p></p></div>
+				                  <button type="submit" class="btn btn-primary form-control">Search</button>
+				                </div>
+				              </form>
+				    	</div>
+			        </div>
+			        <div class="col-sm-6">
+		        		<div class="container" style="width:75%" >
+				              <form class="form-horizontal" action="" method="post">
+				                <div class="form-group">
+				                  <div class="row"><p></p></div>
+				                  <div class="row"><p></p></div>
+				                  <div class="row"><p></p></div>	
+				                  <input type="hidden" name="updatecommonfeeds" class="form-control" value="updatecommonfeedsdb">                  
+				                  <div class="form-row justify-content-md-center"><p></p></div>
+				                  <button type="submit" class="btn btn-primary form-control">Update Common Feeds DB</button>
+				                </div>
+				              </form>
+				    	</div>
+			        </div>
+		       </div>
+		    	<div class="row">
+		    		<div class="col-sm-6">
+		              <div class="panel panel-default">
+		                <div class="panel-heading">
+		                  <h4 class="panel-title gtext3">
+		                    <a data-toggle="collapse" href="#Cymoncollapse">Cymon IO</a>
+		                  </h4>
+		                </div>
+		                 <div id="Cymoncollapse" class="panel-collapse collapse in">
+		                         <table class="table">
+		                                 <!--thead>
+		                                   <tr>
+		                                     <th>title</th>
+		                                     <th>Category</th>
+		                                     <th>Result</th>
+		                                   </tr>
+		                                 </thead-->
+		                                 <tbody>
+		                                   {{range $index, $element := .CymonIpInfo}}
+		                                     <tr>
+		                                       <td class="gtextblk"><p>Title</p></td>
+		                                       <td class="gtext"><p> {{$element.Title}}</p></td>
+		                                       <td class="gtextblk"><p>Description</p></td>
+		                                        <td class="gtext"><p> {{$element.Description}}</p></td>
+		                                     </tr>
+		                                     <tr>
+		                                       <td class="gtextblk"><p>ReportedBy</p></td>
+		                                       <td class="gtext"><p> {{$element.ReportedBy}}</p></td>
+		                                       <td class="gtextblk"><p>URL</p></td>
+		                                       <td class="gtext"><p> {{$element.URL}}</p></td>
+		                                    </tr>
+		                                     <tr>
+		                                       <td class="gtextblk"><p>Domain/IP</p></td>
+		                                       <td class="gtext"><p> {{$element.Domain}}/{{$element.IP}}</p></td>
+		                                       <td class="gtextblk"><p>Hostname</p></td>
+		                                       <td class="gtext"><p> {{$element.Hostname}}</p></td>
+		                                     </tr>
+		                                      <tr>
+		                                        <td class="gtextblk"><p>Country</p></td>
+		                                        <td class="gtext"><p> {{$element.Country}}</p></td>
+		                                        <td class="gtextblk"><p>City</p></td>
+		                                       <td class="gtext"><p> {{$element.City}}</p></td>
+		                                     </tr>
+
+		                                   {{end}}
+		                               </tbody>
+		                             </table>
+		                      </div>
+		              </div>
+        		   </div>
+        		   <div class="col-sm-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title gtext3">
+                    <a data-toggle="collapse" href="#IBMxForceIPcollapse">IBMxForceExchange IP Report</a>
+                  </h4>
+                </div>
+                 <div id="IBMxForceIPcollapse" class="panel-collapse collapse in">
+                   <table class="table">
+
+                           <tbody>
+                             {{range $index, $element := .IBMxFroceIPReport}}
+                               <tr>
+                                 <td class="gtextblk"><p>Created Date</p></td>
+                                 <td class="gtext"><p> {{$element.CreatedDate}}</p></td>
+                                 <td class="gtextblk"><p>Company</p></td>
+                                 <td class="gtext"><p> {{$element.Company}}</p></td>
+
+                               </tr>
+                               <tr>
+                                 <td class="gtextblk"><p>IP</p></td>
+                                 <td class="gtext"><p> {{$element.IP}}</p></td>
+                                 <td class="gtextblk"><p>Country</p></td>
+                                 <td class="gtext"><p> {{$element.Country}}</p></td>
+                              </tr>
+                               <tr>
+                                 <td class="gtextblk"><p>CategoryDescripton</p></td>
+                                 <td class="gtext"><p> {{$element.CategoryDescripton}}</p></td>
+                                 <td class="gtextblk"><p>CategoryType</p></td>
+                                 <td class="gtext"><p> {{$element.CategoryType}}</p></td>
+                               </tr>
+                                <tr>
+                                  <td class="gtextblk"><p>Reason</p></td>
+                                   <td class="gtext"><p> {{$element.Reason}}</p></td>
+                                  <td class="gtextblk"><p>ReasonDescription</p></td>
+                                 <td class="gtext"><p> {{$element.ReasonDescription}}</p></td>
+                               </tr>
+                             {{end}}
+                         </tbody>
+                       </table>
+
+                      </div>
+              </div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4">
+						</div>
+						<div class="col-sm-4">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title gtext3">
+										<a data-toggle="collapse" href="#commonfeeds">Common Feeds Analysis.</a>
+									</h4>
+								</div>
+								 <div id="commonfeeds" class="panel-collapse collapse in">
+								 <table class="table">
+											 <tbody>
+											 {{range $index, $element := .CommonFeeds}}
+												 <tr>
+													 <td class="gtextblk"><p> {{$index}}</p></td>
+													 <td class="gtext"><p>{{$element}}</p></td>
+												 </tr>
+											 {{end}}
+										 </tbody>
+									 </table>
+								 </div>
+							 </div>
+						</div>
+						<div class="col-sm-4">
+						</div>
+		    	</div>
+        	</div> <!-- end of tab-pane iocsearch div-->
+
+        </div> <!-- end of tab-content div-->
+	</div> <!-- end of main container div-->
+
+	<script>
+     $(document).ready(function(){       // This is the simple bit of jquery to duplicate the hidden field to subfile
+         $('#scanfile').change(function(){
+         $('#subfile').val($(this).val());
+       });
+     });
+
+     </script>
+
+     <script type="text/javascript">
+        $(document).ready(function(){
+            $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+            var activeTab = localStorage.getItem('activeTab');
+            if(activeTab){
+                $('#maintab a[href="' + activeTab + '"]').tab('show');
+            }
+        });
+	</script>
+</body>
+</html>
