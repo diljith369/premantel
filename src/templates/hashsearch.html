@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Premantel - Make your hunt easier</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Premantel</h3>
+            </div>
+
+            <ul class="list-unstyled ">
+                    <li>
+                        <a href="/">Malware Scan</a>
+                    </li>
+                  <li class="active">
+                    <a href="/hashsearch">Hash /URL Search</a>
+                  </li>
+                <li>
+                    <a href="/iocsearch">IOC Search</a>
+                </li>
+                
+                <li>
+                    <a href="/commonfeeds">Common Feeds Update</a>
+                </li>
+                
+
+                <li>
+                    <a href="/about">About</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- Page Content Holder -->
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="navbar-btn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                    <div class="container gtextblk" style="width:25%"> <h4><span>Hash / URL Search</span></h4></div>
+                </div>
+            </nav>
+            <div class="row"><p></p></div>
+            <div class="container" style="width:60%" >
+                <form class="form-horizontal" action="" method="post">
+                  <div class="form-group">
+                      <!--label for="search">Enter URL/MD5</label-->
+                      <input type="text" name="search" class="form-control" id="search"  placeholder="Search for URL or hash">
+                      <div class="row"><p></p></div>
+                      <button type="submit" class="btn btn-primary form-control">Search</button>
+                  </div>
+                </form>
+           </div>
+                  
+           <div class="row" id="vtandfileinfo">
+              <div class="col-sm-6">
+                   <div class="container" style="width:100%" >
+                       <div class="panel panel-default">
+                         <div class="panel-heading">
+                           <h4 class="panel-title gtext3">
+                             <a data-toggle="collapse" href="#vtcollapse">Virus Total</a>
+                           </h4>
+                         </div>
+                          <div id="vtcollapse" class="panel-collapse collapse show">
+                            <table class="table  ">
+                                <thead>
+                                  <tr>
+                                    <th>AV Engine</th>
+                                    <th>Result</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {{range $index, $element := .Vtscanres}}
+                                    <tr>
+                                      <td class="gtextblk">{{$index}}</td>
+                                      <td class="gtext">{{$element}}</td>
+                                    </tr>
+                                  {{end}}
+                                </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                 </div> <!-- end of vt column div-->
+                  <div class="col-sm-6">
+                     <div class="container" style="width:100%" >
+                         <div class="panel panel-default">
+                           <div class="panel-heading">
+                             <h4 class="panel-title gtext3">
+                               <a data-toggle="collapse" href="#vtadditionalfileinfocollapse">Additional  file Information.</a>
+                             </h4>
+                           </div>
+                            <div id="vtadditionalfileinfocollapse" class="panel-collapse collapse in">
+                              <table class="table">
+                                <tbody>
+                                  {{range $index, $element := .VtUploadedFileInfo}}
+                                    <tr>
+                                      <td class="gtextblk">{{$index}}</td>
+                                      <td class="gtextgreen">{{$element}}</td>
+                                    </tr>
+                                  {{end}}
+                                </tbody>
+                              </table>
+
+                            </div>
+                          </div>
+                     </div>
+                  </div> <!-- end of additional file info  column div-->
+            </div> <!-- end of vtandfileinfo row div-->
+            
+            <div class="row">
+                <div class="col-sm-6">
+                  <div class="container" style="width:100%" >
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title gtext3">
+                            <a data-toggle="collapse" href="#IBMxForceExchange">IBMxForceExchange</a>
+                          </h4>
+                        </div>
+                         <div id="IBMxForceExchange" class="panel-collapse collapse show">
+                           <table class="table  ">
+                              <tbody>
+                                 {{range $index, $element := .IBMxForceMalwareReport}}
+                                   <tr>
+                                     <td class="gtextblk">{{$index}}</td>
+                                     <td class="gtext">{{$element}}</td>
+                                   </tr>
+                                 {{end}}
+                               </tbody>
+                           </table>
+                         </div>
+                       </div>
+                 </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="container" style="width:100%" >
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title gtext3">
+                            <a data-toggle="collapse" href="#shadowservercollapse">ShadowServer</a>
+                          </h4>
+                        </div>
+                         <div id="shadowservercollapse" class="panel-collapse collapse show">
+                           <table class="table  ">
+                               <thead>
+                                 <tr>
+                                   <th>AV Engine</th>
+                                   <th>Result</th>
+                                 </tr>
+                               </thead>
+                               <tbody>
+                                 {{range $index, $element := .ShadowServer}}
+                                   <tr>
+                                     <td class="gtextblk">{{$index}}</td>
+                                     <td class="gtext">{{$element}}</td>
+                                   </tr>
+                                 {{end}}
+                               </tbody>
+                           </table>
+                         </div>
+                       </div>
+                 </div>
+                </div>
+
+              </div> <!--end of ibm and shadow server row-->
+              
+              <div class="row" id="safebrowseandurlquery">
+                  <div class="col-sm-6">
+                    <div class="container" style="width:100%" >
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title gtext3">
+                              <a data-toggle="collapse" href="#GoogleSafeBrowsecollapse">GoogleSafeBrowse</a>
+                            </h4>
+                          </div>
+                           <div id="GoogleSafeBrowsecollapse" class="panel-collapse collapse show">
+                             <table class="table">
+                                 <thead>
+                                   <tr>
+                                     <th>Threat Type</th>
+                                     <th>Platform</th>
+                                     <th>URL</th>
+                                   </tr>
+                                 </thead>
+                                 <tbody>
+                                   {{range $index, $element := .GoogleSafeBrowse}}
+                                     <tr>
+                                        {{range $element}}
+                                          <td class="gtext">{{.}}</td>
+                                        {{end}}
+                                     </tr>
+                                   {{end}}
+                               </tbody>
+                             </table>
+                           </div>
+                         </div>
+                   </div>
+                  </div>
+                  <div class="col-sm-6">
+                   <div class="container" style="width:100%" >
+                       <div class="panel panel-default">
+                         <div class="panel-heading">
+                           <h4 class="panel-title gtext3">
+                             <a data-toggle="collapse" href="#Urlquerynetcollapse">Urlquery.net</a>
+                           </h4>
+                         </div>
+                         <div id="Urlquerynetcollapse" class="panel-collapse collapse show">
+                            <table class="table  ">
+                                <thead>
+                                  <tr>
+                                    <th>Source</th>
+                                    <th>Result</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {{range $index, $element := .Urlquerynetsearch}}
+                                  <tr>
+                                    <td class="gtextblk">{{$index}}</td>
+                                     <td class="gtext">{{$element}}</td>
+                                    </tr>
+                                  {{end}}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                  </div>
+                 </div>
+                </div> <!-- end of safebrowseandurlquery div-->
+        </div>
+    </div>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
+    </script>
+    
+</body>
+
+</html>

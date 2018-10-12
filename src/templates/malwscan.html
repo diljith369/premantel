@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Premantel - Make your hunt easier</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Premantel</h3>
+            </div>
+
+            <ul class="list-unstyled ">
+                    <li class="active">
+                        <a href="/">Malware Scan</a>
+                    </li>
+                  <li>
+                    <a href="/hashsearch">Hash /URL Search</a>
+                  </li>
+                <li>
+                    <a href="iocsearch">IOC Search</a>
+                </li>
+                <li>
+                    <a href="commonfeeds">Common Feeds Update</a>
+                </li>
+                <li>
+                    <a href="/about">About</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- Page Content Holder -->
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="navbar-btn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                    <div class="container gtextblk" style="width:25%"> <h4><span>Malware Scan</span></h4></div>
+                </div>
+            </nav>
+            
+            <div class="container" style="width:40%" >                    
+                    <form  class="form-horizontal" enctype="multipart/form-data" action="/" method="post">
+                      <div class="form-group">
+                        <input type="file" name="upfile" style="visibility:hidden;" id="scanfile" />
+                        <!--label for="subfile">Choose A File</label-->
+                        <div class="form-group input-append">	<!-- This input is here purely for cosmetic reasons. The actual file is uploaded from the hidden input box !-->
+                          <input type="text" name="filepath" id="subfile" class="input-xlarge form-control" placeholder="Selected file path">
+                          <a class="btn btn-primary form-control" onclick="$('#scanfile').click();">Select File</a>
+                          <div class="form-row justify-content-md-center"><p></p></div>
+                          <button type="submit" class="btn btn-success form-control">Upload</button>
+                        </div>
+                      </div>
+                    </form>
+            </div>
+            <div class="container" style="width:100">
+                    <div class="row">
+                        <div class="col-sm-4" id="avcasesarpanel">
+                           <div class="panel panel-default">
+                                <div class="panel-heading">
+                                  <h4 class="panel-title gtext3">
+                                       <a data-toggle="collapse" href="#AvCaesorcollapse">AvCaesor</a>
+                                  </h4>
+                                </div>
+                                <div id="AvCaesorcollapse" class="panel-collapse collapse show">
+                                  <table class="table  ">
+                                      <thead>
+                                        <tr>
+                                          <th>AV Engine</th>
+                                          <th>Result</th>
+                                        </tr>
+                                      </thead>
+                                    <tbody>
+                                      {{range $index, $element := .AvCaesorAVEngineResult}}
+                                        <tr>
+                                          <td class="gtextblk"> {{$index}}</td>
+                                          <td class="gtext">{{$element}}</td>
+                                        </tr>
+                                      {{end}}
+                                    </tbody>
+                                  </table>
+                                </div>
+                         </div>
+                        </div> <!--end of avcasesarpanel column-->
+                        <div class="col-sm-4" id="Jotti">
+                            <div class="panel panel-default">
+                              <div class="panel-heading">
+                                <h4 class="panel-title gtext3">
+                                  <a data-toggle="collapse" href="#vtjotticollapse">Virusscan.Jotti</a>
+                                </h4>
+                              </div>
+                               <div id="vtjotticollapse" class="panel-collapse collapse show">
+                                 <table class="table  ">
+                                     <thead>
+                                       <tr>
+                                         <th>AV Engine</th>
+                                         <th>Result</th>
+                                          </tr>
+                                     </thead>
+                                   <tbody>
+                                     {{range $index, $element := .Jottiscanres}}
+                                       <tr>
+                                         <td class="gtextblk"> {{$index}}</td>
+                                         <td class="gtext">{{$element}}</td>
+                                       </tr>
+                                     {{end}}
+                                      </tbody>
+                                 </table>
+                               </div>
+                            </div>
+                      </div> <!--end of Jotti column-->
+                       <div class="col-sm-4">
+                          <div class="panel panel-default">
+                              <div class="panel-heading">
+                                <h4 class="panel-title gtext3">
+                                  <a data-toggle="collapse" href="#Metadefendercollapse">Metadefender</a>
+                                </h4>
+                              </div>
+                               <div id="Metadefendercollapse" class="panel-collapse collapse show">
+                                 <table class="table  ">
+                                     <thead>
+                                       <tr>
+                                         <th>AV Engine</th>
+                                         <th>Result</th>
+                                     </tr>
+                                   </thead>
+                                   {{range $index, $element := .MetaScanres}}
+                                     <tr>
+                                       <td class="gtextblk"> {{$index}}</td>
+                                       <td class="gtext">{{$element}}</td>
+                                     </tr>
+                                   {{end}}
+                                 </table>
+
+                               </div>
+                             </div>
+                        </div>
+                    </div> <!--end of av container row-->
+                    <div class="row">
+                         
+                        <div class="col-sm-8">
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h4 class="panel-title gtext3">
+                                <a data-toggle="collapse" href="#commonadditionalfileinfocollapse">Additional file Information.</a>
+                              </h4>
+                            </div>
+                             <div id="commonadditionalfileinfocollapse" class="panel-collapse collapse show">
+                             <table class="table">
+                                   <tbody>
+                                   {{range $index, $element := .AvCaesorAVFileInfoResult}}
+                                     <tr>
+                                       <td class="gtextblk"> {{$index}}</td>
+                                       <td class="gtextgreen">{{$element}}</td>
+                                     </tr>
+                                   {{end}}
+                                 </tbody>
+                               </table>
+                             </div>
+                           </div>
+                        </div>
+                        <div class="col-sm-2">
+                        </div>
+                     </div>  <!--end of additional file info row-->
+                </div>
+                  
+           
+        </div>
+    </div>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
+    </script>
+    <script>
+            $(document).ready(function(){       // This is the simple bit of jquery to duplicate the hidden field to subfile
+                $('#scanfile').change(function(){
+                $('#subfile').val($(this).val());
+              });
+            });
+       
+            </script>
+</body>
+
+</html>

@@ -30,6 +30,7 @@ func Shadowserversearch(searchval string, ShadowServer map[string]string, finfla
 	}
 	var resultstring string
 	resultstring = string(bodybyte)
+	//fmt.Println(resultstring)
 	finalarray := strings.Split(resultstring, "\n")
 	if len(finalarray) > 0 {
 		for i := range finalarray {
@@ -39,9 +40,27 @@ func Shadowserversearch(searchval string, ShadowServer map[string]string, finfla
 			}
 		}
 		for k := range avresult {
-			if strings.Contains(avresult[k], ":") {
-				ShadowServer[(strings.Replace(strings.Replace(strings.Split(avresult[k], ":")[0], "\"", "", 2), "{", "", 1))] = (strings.Replace(strings.Replace(strings.Split(avresult[k], ":")[1], "\"", "", 2), "}", "", 1))
+			newstr := strings.Split(avresult[k], ",")
+			for i := range newstr {
+				if strings.ContainsAny(newstr[i], "{") {
+					newstr[i] = strings.Replace(newstr[i], "{", "", 1)
+				}
+				if strings.ContainsAny(newstr[i], "}") {
+					newstr[i] = strings.Replace(newstr[i], "}", "", 1)
+				}
+				if strings.ContainsAny(newstr[i], "\"") {
+					newstr[i] = strings.Replace(newstr[i], "\"", "", -1)
+				}
+				if len(strings.Split(newstr[i], ":")) > 0 {
+					avname := strings.Split(newstr[i], ":")[0]
+					catname := strings.Split(newstr[i], ":")[1]
+					ShadowServer[avname] = catname
+				}
+				//fmt.Println(newstr[i])
 			}
+			/*if strings.Contains(avresult[k], ":") {
+				ShadowServer[(strings.Replace(strings.Replace(strings.Split(avresult[k], ":")[0], "\"", "", 2), "{", "", 1))] = (strings.Replace(strings.Replace(strings.Split(avresult[k], ":")[1], "\"", "", 2), "}", "", 1))
+			}*/
 		}
 	}
 

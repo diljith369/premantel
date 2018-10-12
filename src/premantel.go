@@ -24,7 +24,7 @@ import (
 	"./virustotal"
 )
 
-var mmsatpl *template.Template
+var malwscantmpl, hashsearchtmpl, icosearchtmpl, commonfeedtmpl, abouttmpl *template.Template
 var apikeys threatintelstructs.APIs
 
 var commonipfeeds threatintelstructs.IPFeeds
@@ -71,7 +71,11 @@ type ScanResults struct {
 var scanResultStructForTemplate ScanResults
 
 func init() {
-	mmsatpl = template.Must(template.ParseFiles("./templates/premantel.html"))
+	malwscantmpl = template.Must(template.ParseFiles("./templates/malwscan.html"))
+	hashsearchtmpl = template.Must(template.ParseFiles("./templates/hashsearch.html"))
+	icosearchtmpl = template.Must(template.ParseFiles("./templates/iocsearch.html"))
+	commonfeedtmpl = template.Must(template.ParseFiles("./templates/commonfeeds.html"))
+	abouttmpl = template.Must(template.ParseFiles("./templates/about.html"))
 	apikeys = threatintelstructs.APIs{}
 	commonipfeeds = threatintelstructs.IPFeeds{}
 	commondnsfeeds = threatintelstructs.DomainFeeds{}
@@ -158,9 +162,196 @@ func clearsafebrosehistory(clearmap map[string][]string) {
 
 }
 
-func index(httpwr http.ResponseWriter, req *http.Request) {
+func hashsearch(httpwr http.ResponseWriter, req *http.Request) {
 	if req.Method == "GET" {
-		err := mmsatpl.Execute(httpwr, nil)
+		err := hashsearchtmpl.Execute(httpwr, nil)
+		if err != nil {
+			fmt.Println(err)
+		}
+	} else {
+		err := req.ParseForm()
+		if err != nil {
+			fmt.Println(err)
+		}
+		searchval := req.Form.Get("search")
+		//filepath := req.Form.Get("filepath")
+		//fmt.Println("path " + searchval)
+
+		if strings.Compare(strings.TrimSpace(searchval), "") != 0 {
+
+			clearhistory(scanResultStructForTemplate.Vtscanres)
+			clearhistory(scanResultStructForTemplate.VtUploadedFileInfo)
+			clearsafebrosehistory(scanResultStructForTemplate.GoogleSafeBrowse)
+			clearhistory(scanResultStructForTemplate.Urlquerynetsearch)
+			clearhistory(scanResultStructForTemplate.ShadowServer)
+			clearhistory(scanResultStructForTemplate.IBMxForceMalwareReport)
+
+			//vtResult = vtResult[:0]
+			//vtResult = vtScanner(strings.TrimSpace(searchval))
+			if strings.Index(searchval, "http") == 0 {
+				finflag := make(chan string)
+				go urlquerynet.Urlquerynetsearch(searchval, scanResultStructForTemplate.Urlquerynetsearch, finflag)
+				go safebrowse.Getgooglesafebrowseresult(searchval, apikeys.Safebrowse, scanResultStructForTemplate.GoogleSafeBrowse, finflag)
+				go virustotal.VtURLScanner(strings.TrimSpace(searchval), scanResultStructForTemplate.Vtscanres, finflag)
+				<-finflag
+				<-finflag
+				<-finflag
+
+			} else {
+				finflag := make(chan string)
+				//fmt.Println(searchval + "inside hash")
+				//go vtexescanprocess(finflag)
+				go virustotal.VtExeScanner(strings.TrimSpace(searchval), scanResultStructForTemplate.Vtscanres, scanResultStructForTemplate.VtUploadedFileInfo, finflag)
+				go ibmxforce.XchangeMalwareHashReport(strings.TrimSpace(searchval), apikeys.IBMxForceKey, apikeys.IBMxForcePass, scanResultStructForTemplate.IBMxForceMalwareReport, finflag)
+				go shadowserver.Shadowserversearch(strings.TrimSpace(searchval), scanResultStructForTemplate.ShadowServer, finflag)
+				<-finflag
+				<-finflag
+				<-finflag
+
+			}
+
+			/*for k, v := range scanResultStructForTemplate.Vtscanres{
+				 fmt.Printf("%s\t\t%s\n ", k,v)
+			 }*/
+			err := hashsearchtmpl.Execute(httpwr, scanResultStructForTemplate)
+			if err != nil {
+				fmt.Println(err)
+			}
+
+		}
+
+	}
+}
+
+func malwscan(httpwr http.ResponseWriter, req *http.Request) {
+	if req.Method == "GET" {
+		err := malwscantmpl.Execute(httpwr, nil)
+		if err != nil {
+			fmt.Println(err)
+		}
+	} else {
+
+		clearhistory(scanResultStructForTemplate.Jottiscanres)
+		clearhistory(scanResultStructForTemplate.AvCaesorAVFileInfoResult)
+		clearhistory(scanResultStructForTemplate.AvCaesorAVEngineResult)
+		clearhistory(scanResultStructForTemplate.MetaScanres)
+		err := req.ParseForm()
+		file, handler, err := req.FormFile("upfile")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer file.Close()
+		filename := handler.Filename
+		if strings.Compare(strings.TrimSpace(filename), "") != 0 {
+
+			f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0666)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			defer f.Close()
+
+			io.Copy(f, file)
+			if err != nil {
+				fmt.Println(err)
+			}
+			finflag := make(chan string)
+
+			go jotti.Jottiscanprocess(file, filename, finflag, apikeys.Jotti, scanResultStructForTemplate.Jottiscanres)
+			go avcaesar.Uploadfiletoavcaesar(filename, finflag, scanResultStructForTemplate.AvCaesorAVFileInfoResult, scanResultStructForTemplate.AvCaesorAVEngineResult)
+			go metadefender.Metadefenderfilescan(filename, finflag, apikeys.Metadefender, scanResultStructForTemplate.MetaScanres)
+			//time.Sleep(6000 * time.Millisecond)
+			<-finflag
+			<-finflag
+			<-finflag
+
+			err = malwscantmpl.Execute(httpwr, scanResultStructForTemplate)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+
+	}
+
+}
+
+func iocsearch(httpwr http.ResponseWriter, req *http.Request) {
+	if req.Method == "GET" {
+		err := icosearchtmpl.Execute(httpwr, nil)
+		if err != nil {
+			fmt.Println(err)
+		}
+	} else {
+
+		for k := range scanResultStructForTemplate.CymonIpInfo {
+			delete(scanResultStructForTemplate.CymonIpInfo, k)
+		}
+		//clear values
+		for k := range scanResultStructForTemplate.IBMxFroceIPReport {
+			delete(scanResultStructForTemplate.IBMxFroceIPReport, k)
+		}
+
+		clearhistory(scanResultStructForTemplate.CommonFeeds)
+		err := req.ParseForm()
+		if err != nil {
+			fmt.Println(err)
+		}
+		searchIPDomain := strings.TrimSpace(req.Form.Get("iocsearch"))
+		validIP := regexp.MustCompile(`^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$`)
+		isIP := validIP.MatchString(searchIPDomain)
+
+		finflag := make(chan string)
+		go cymonio.Getcymoniotoken(apikeys.CymonUser, apikeys.CymonPassword, finflag)
+		<-finflag
+		go cymonio.Getdetailsfromcymon(finflag, isIP, searchIPDomain, scanResultStructForTemplate.CymonIpInfo)
+		<-finflag
+		if isIP {
+			go ibmxforce.XchangeIPReport(searchIPDomain, apikeys.IBMxForceKey, apikeys.IBMxForcePass, scanResultStructForTemplate.IBMxFroceIPReport, finflag)
+			<-finflag
+			go commonfeeds.GetAnalysisresultFromKeyFile(searchIPDomain, commonipfeeds.SnortIPFilter, scanResultStructForTemplate.CommonFeeds, "SnortIPFilter", finflag)
+			<-finflag
+			go commonfeeds.GetAnalysisresultFromKeyFile(searchIPDomain, commonipfeeds.SuricataCompromised, scanResultStructForTemplate.CommonFeeds, "SuricataCompromised", finflag)
+			<-finflag
+			go commonfeeds.GetAnalysisresultFromKeyFile(searchIPDomain, commonipfeeds.AlienvaultReputation, scanResultStructForTemplate.CommonFeeds, "AlienvaultReputation", finflag)
+			<-finflag
+			go commonfeeds.GetAnalysisresultFromKeyFile(searchIPDomain, commonipfeeds.SuricataBotCC, scanResultStructForTemplate.CommonFeeds, "SuricataBotCC", finflag)
+			<-finflag
+			go commonfeeds.GetAnalysisresultFromKeyFile(searchIPDomain, commonipfeeds.SurricataTor, scanResultStructForTemplate.CommonFeeds, "SurricataTor", finflag)
+			<-finflag
+			go commonfeeds.GetAnalysisresultFromKeyFile(searchIPDomain, commonipfeeds.MalwareDomainlistIP, scanResultStructForTemplate.CommonFeeds, "MalwareDomainlistIP", finflag)
+			<-finflag
+			go commonfeeds.GetAnalysisresultFromKeyFile(searchIPDomain, commonipfeeds.CiarmyBadIps, scanResultStructForTemplate.CommonFeeds, "CiarmyBadIps", finflag)
+			<-finflag
+
+		} else {
+			go commonfeeds.GetAnalysisresultFromKeyFile(searchIPDomain, commondnsfeeds.MalwareDomainHosts, scanResultStructForTemplate.CommonFeeds, "MalwareDomainHosts", finflag)
+			<-finflag
+			go commonfeeds.GetAnalysisresultFromKeyFile(searchIPDomain, commondnsfeeds.MandiantAPT, scanResultStructForTemplate.CommonFeeds, "MandiantAPT", finflag)
+			<-finflag
+
+		}
+
+		err = icosearchtmpl.Execute(httpwr, scanResultStructForTemplate)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+	}
+}
+
+func about(httpwr http.ResponseWriter, req *http.Request) {
+	if req.Method == "GET" {
+		err := abouttmpl.Execute(httpwr, nil)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+}
+
+func commonfeedsupdate(httpwr http.ResponseWriter, req *http.Request) {
+	if req.Method == "GET" {
+		err := commonfeedtmpl.Execute(httpwr, nil)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -186,7 +377,43 @@ func index(httpwr http.ResponseWriter, req *http.Request) {
 			<-finflag
 			go commonfeeds.UpdateCommonDB(commondnsfeeds.MandiantAPT, "MandiantAPT", finflag)
 			<-finflag
-			err = mmsatpl.Execute(httpwr, nil)
+			err = commonfeedtmpl.Execute(httpwr, nil)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+	}
+}
+
+func index(httpwr http.ResponseWriter, req *http.Request) {
+	if req.Method == "GET" {
+		err := malwscantmpl.Execute(httpwr, nil)
+		if err != nil {
+			fmt.Println(err)
+		}
+	} else {
+		err := req.ParseForm()
+		if strings.Compare(strings.TrimSpace(req.Form.Get("updatecommonfeeds")), "updatecommonfeedsdb") == 0 {
+			finflag := make(chan string)
+			go commonfeeds.UpdateCommonDB(commonipfeeds.SnortIPFilter, "SnortIPFilter", finflag)
+			<-finflag
+			go commonfeeds.UpdateCommonDB(commonipfeeds.SuricataCompromised, "SuricataCompromised", finflag)
+			<-finflag
+			go commonfeeds.UpdateCommonDB(commonipfeeds.AlienvaultReputation, "AlienvaultReputation", finflag)
+			<-finflag
+			go commonfeeds.UpdateCommonDB(commonipfeeds.SuricataBotCC, "SuricataBotCC", finflag)
+			<-finflag
+			go commonfeeds.UpdateCommonDB(commonipfeeds.SurricataTor, "SurricataTor", finflag)
+			<-finflag
+			go commonfeeds.UpdateCommonDB(commonipfeeds.MalwareDomainlistIP, "MalwareDomainlistIP", finflag)
+			<-finflag
+			go commonfeeds.UpdateCommonDB(commonipfeeds.CiarmyBadIps, "CiarmyBadIps", finflag)
+			<-finflag
+			go commonfeeds.UpdateCommonDB(commondnsfeeds.MalwareDomainHosts, "MalwareDomainHosts", finflag)
+			<-finflag
+			go commonfeeds.UpdateCommonDB(commondnsfeeds.MandiantAPT, "MandiantAPT", finflag)
+			<-finflag
+			err = malwscantmpl.Execute(httpwr, nil)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -230,7 +457,7 @@ func index(httpwr http.ResponseWriter, req *http.Request) {
 				/*for k, v := range scanResultStructForTemplate.Vtscanres{
 					 fmt.Printf("%s\t\t%s\n ", k,v)
 				 }*/
-				err = mmsatpl.Execute(httpwr, scanResultStructForTemplate)
+				err = malwscantmpl.Execute(httpwr, scanResultStructForTemplate)
 				if err != nil {
 					fmt.Println(err)
 				}
@@ -280,7 +507,7 @@ func index(httpwr http.ResponseWriter, req *http.Request) {
 
 				}
 
-				err = mmsatpl.Execute(httpwr, scanResultStructForTemplate)
+				err = malwscantmpl.Execute(httpwr, scanResultStructForTemplate)
 				if err != nil {
 					fmt.Println(err)
 				}
@@ -322,7 +549,7 @@ func index(httpwr http.ResponseWriter, req *http.Request) {
 					<-finflag
 					<-finflag
 
-					err = mmsatpl.Execute(httpwr, scanResultStructForTemplate)
+					err = malwscantmpl.Execute(httpwr, scanResultStructForTemplate)
 					if err != nil {
 						fmt.Println(err)
 					}
@@ -336,9 +563,13 @@ func index(httpwr http.ResponseWriter, req *http.Request) {
 func main() {
 	fillapikeys()
 	fillcommonfeeds()
-	http.HandleFunc("/", index)
-	/*http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("templates/css"))))
-	http.Handle("/fonts/", http.StripPrefix("/fonts/", http.FileServer(http.Dir("templates/fonts"))))
+	http.HandleFunc("/", malwscan)
+	http.HandleFunc("/hashsearch", hashsearch)
+	http.HandleFunc("/iocsearch", iocsearch)
+	http.HandleFunc("/commonfeeds", commonfeedsupdate)
+	http.HandleFunc("/about", about)
+	http.Handle("/static/css/", http.StripPrefix("/static/css/", http.FileServer(http.Dir("static/css"))))
+	/*http.Handle("/fonts/", http.StripPrefix("/fonts/", http.FileServer(http.Dir("templates/fonts"))))
 	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("templates/js"))))
 	http.Handle("/vendor/", http.StripPrefix("/vendor/", http.FileServer(http.Dir("templates/vendor"))))*/
 	http.ListenAndServe(":"+apikeys.AppPort, nil)
