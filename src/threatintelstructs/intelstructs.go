@@ -1928,6 +1928,7 @@ type APIs struct {
 	Metadefender  string
 	IBMxForceKey  string
 	IBMxForcePass string
+	Shodan        string
 }
 
 type IPFeeds struct {
@@ -1942,4 +1943,66 @@ type IPFeeds struct {
 type DomainFeeds struct {
 	MalwareDomainHosts string `json:"MalwareDomainHosts"`
 	MandiantAPT        string `json:"MandiantAPT"`
+}
+
+type Shodan struct {
+	RegionCode  interface{}   `json:"region_code"`
+	IP          string        `json:"ip"`
+	AreaCode    interface{}   `json:"area_code"`
+	CountryName string        `json:"country_name"`
+	Hostnames   []interface{} `json:"hostnames"`
+	PostalCode  interface{}   `json:"postal_code"`
+	DmaCode     interface{}   `json:"dma_code"`
+	CountryCode string        `json:"country_code"`
+	Data        []struct {
+		Product    string        `json:"product,omitempty"`
+		Os         interface{}   `json:"os"`
+		Timestamp  string        `json:"timestamp"`
+		Isp        string        `json:"isp"`
+		Asn        string        `json:"asn"`
+		Banner     string        `json:"banner"`
+		Hostnames  []interface{} `json:"hostnames"`
+		Devicetype string        `json:"devicetype,omitempty"`
+		Location   struct {
+			City         interface{} `json:"city"`
+			RegionCode   interface{} `json:"region_code"`
+			AreaCode     interface{} `json:"area_code"`
+			Longitude    float64     `json:"longitude"`
+			CountryCode3 string      `json:"country_code3"`
+			CountryName  string      `json:"country_name"`
+			PostalCode   interface{} `json:"postal_code"`
+			DmaCode      interface{} `json:"dma_code"`
+			CountryCode  string      `json:"country_code"`
+			Latitude     float64     `json:"latitude"`
+		} `json:"location"`
+		IP      string        `json:"ip"`
+		Domains []interface{} `json:"domains"`
+		Org     string        `json:"org"`
+		Port    int           `json:"port"`
+		Opts    struct {
+		} `json:"opts"`
+	} `json:"data"`
+	City         interface{} `json:"city"`
+	Longitude    float64     `json:"longitude"`
+	CountryCode3 string      `json:"country_code3"`
+	Latitude     float64     `json:"latitude"`
+	Os           interface{} `json:"os"`
+	Ports        []int       `json:"ports"`
+}
+
+type Cybercure struct {
+	Status    int    `json:"status"`
+	Indicator string `json:"indicator"`
+	Exists    bool   `json:"exists"`
+	Visual    string `json:"visual"`
+	Details   struct {
+		LastSighting struct {
+			Date             string        `json:"date"`
+			TargetedCountry  string        `json:"targeted_country"`
+			TargetedSegment  string        `json:"targeted_segment"`
+			AssociatedUrls   []string      `json:"associated_urls"`
+			AssociatedHashes []interface{} `json:"associated_hashes"`
+		} `json:"last_sighting"`
+		More string `json:"more"`
+	} `json:"details"`
 }

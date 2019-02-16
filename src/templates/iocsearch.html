@@ -172,8 +172,30 @@
             </div>
             </div>
             <div class="row">
-               
-                <div class="col-sm-6">
+              <div class="col-sm-4">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title gtext3">
+                      <a data-toggle="collapse" href="#ShodanResult">Shodan IP Report</a>
+                    </h4>
+                  </div>
+                   <div id="ShodanResult" class="panel-collapse collapse show">
+                     <table class="table">
+  
+                             <tbody>
+                               {{range $index, $element := .ShodanResult}}
+                                 <tr>
+                                  <td class="gtextblk"> {{$index}}</td>
+                                  <td class="gtext">{{$element}}</td>    
+                                 </tr>
+                               {{end}}
+                           </tbody>
+                         </table>
+  
+                        </div>
+                </div>
+            </div>
+                <div class="col-sm-4">
                   <div class="panel panel-default">
                     <div class="panel-heading">
                       <h4 class="panel-title gtext3">
@@ -195,7 +217,27 @@
                    </div>
                 </div>
                 <div class="col-sm-4">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title gtext3">
+                        <a data-toggle="collapse" href="#Cybercure">Cybercure IP Report.</a>
+                      </h4>
+                    </div>
+                     <div id="Cybercure" class="panel-collapse collapse show">
+                     <table class="table">
+                           <tbody>
+                           {{range $index, $element := .CybercureResult}}
+                             <tr>
+                               <td class="gtextblk"> {{$index}}</td>
+                               <td class="gtext">{{$element}}</td>
+                             </tr>
+                           {{end}}
+                         </tbody>
+                       </table>
+                     </div>
+                   </div>
                 </div>
+                
               </div>
             
         </div>

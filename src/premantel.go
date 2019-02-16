@@ -13,12 +13,14 @@ import (
 
 	"./avcaesar"
 	"./commonfeeds"
+	"./cybercure"
 	"./cymonio"
 	"./ibmxforce"
 	"./jotti"
 	"./metadefender"
 	"./safebrowse"
 	"./shadowserver"
+	"./shodan"
 	"./threatintelstructs"
 	"./urlquerynet"
 	"./virustotal"
@@ -65,7 +67,9 @@ type ScanResults struct {
 		ReasonDescription  string
 		IP                 string
 	}
-	CommonFeeds map[string]string
+	CommonFeeds     map[string]string
+	ShodanResult    map[string]string
+	CybercureResult map[string]string
 }
 
 var scanResultStructForTemplate ScanResults
@@ -114,6 +118,8 @@ func init() {
 	scanResultStructForTemplate.ShadowServer = make(map[string]string)
 	scanResultStructForTemplate.IBMxForceMalwareReport = make(map[string]string)
 	scanResultStructForTemplate.CommonFeeds = make(map[string]string)
+	scanResultStructForTemplate.ShodanResult = make(map[string]string)
+	scanResultStructForTemplate.CybercureResult = make(map[string]string)
 }
 func fillcommonfeeds() {
 	ipfeedfile, err := ioutil.ReadFile("./commonfeeds/ipfeeds.cfg")
@@ -293,6 +299,9 @@ func iocsearch(httpwr http.ResponseWriter, req *http.Request) {
 		}
 
 		clearhistory(scanResultStructForTemplate.CommonFeeds)
+		clearhistory(scanResultStructForTemplate.ShodanResult)
+		clearhistory(scanResultStructForTemplate.CybercureResult)
+
 		err := req.ParseForm()
 		if err != nil {
 			fmt.Println(err)
@@ -307,6 +316,10 @@ func iocsearch(httpwr http.ResponseWriter, req *http.Request) {
 		go cymonio.Getdetailsfromcymon(finflag, isIP, searchIPDomain, scanResultStructForTemplate.CymonIpInfo)
 		<-finflag
 		if isIP {
+			go shodan.ShodanSearch(searchIPDomain, apikeys.Shodan, scanResultStructForTemplate.ShodanResult, finflag)
+			<-finflag
+			go cybercure.CybercureResult(searchIPDomain, scanResultStructForTemplate.CybercureResult, finflag)
+			<-finflag
 			go ibmxforce.XchangeIPReport(searchIPDomain, apikeys.IBMxForceKey, apikeys.IBMxForcePass, scanResultStructForTemplate.IBMxFroceIPReport, finflag)
 			<-finflag
 			go commonfeeds.GetAnalysisresultFromKeyFile(searchIPDomain, commonipfeeds.SnortIPFilter, scanResultStructForTemplate.CommonFeeds, "SnortIPFilter", finflag)
@@ -481,7 +494,12 @@ func index(httpwr http.ResponseWriter, req *http.Request) {
 				<-finflag
 				go cymonio.Getdetailsfromcymon(finflag, isIP, searchIPDomain, scanResultStructForTemplate.CymonIpInfo)
 				<-finflag
+				fmt.Println("ip search shodan")
+
 				if isIP {
+					fmt.Println("get shodan")
+					go shodan.ShodanSearch(searchIPDomain, apikeys.Shodan, scanResultStructForTemplate.ShodanResult, finflag)
+					<-finflag
 					go ibmxforce.XchangeIPReport(searchIPDomain, apikeys.IBMxForceKey, apikeys.IBMxForcePass, scanResultStructForTemplate.IBMxFroceIPReport, finflag)
 					<-finflag
 					go commonfeeds.GetAnalysisresultFromKeyFile(searchIPDomain, commonipfeeds.SnortIPFilter, scanResultStructForTemplate.CommonFeeds, "SnortIPFilter", finflag)
