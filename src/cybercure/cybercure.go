@@ -35,7 +35,7 @@ func CybercureResult(searchval string, CybsercureScanResult map[string]string, f
 	}
 	json.Unmarshal(bodybyte, &cybercureresult)
 	if cybercureresult.Exists {
-		fmt.Println(cybercureresult.Details.LastSighting.TargetedCountry)
+		//fmt.Println(cybercureresult.Details.LastSighting.TargetedCountry)
 		CybsercureScanResult["Targeted Country"] = (cybercureresult.Details.LastSighting.TargetedCountry)
 		CybsercureScanResult["Targeted Segment"] = (cybercureresult.Details.LastSighting.TargetedSegment)
 
