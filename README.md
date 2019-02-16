@@ -1,6 +1,6 @@
 # Premantel - Malware Analysis and Threat Intel Framework
 
-##### Premantel - A threat intel and premalware analysis framework  . User can check malware files against three different malware provider's engines . Included functionality to check IOC details of hashes , urls , IPs and domains from different resources.
+##### Premantel - A threat intel and premalware analysis framework  . User can check malware files against three different anti malware online scanners . Included functionality to check IOC details of hashes , urls , IPs and domains from different resources.
 
 ### Resources available for Win Exe analysis.
 #### •	AvCaesar 
