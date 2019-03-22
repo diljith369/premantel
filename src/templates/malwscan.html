@@ -83,14 +83,14 @@
                         <div class="col-sm-4" id="avcasesarpanel">
                            <div class="panel panel-default">
                                 <div class="panel-heading">
-                                  <h4 class="panel-title gtext3">
+                                  <h4 class="panel-title gtextcyan">
                                        <a data-toggle="collapse" href="#AvCaesorcollapse">AvCaesor</a>
                                   </h4>
                                 </div>
                                 <div id="AvCaesorcollapse" class="panel-collapse collapse show">
                                   <table class="table  ">
                                       <thead>
-                                        <tr>
+                                        <tr class="gtextalicehead">
                                           <th>AV Engine</th>
                                           <th>Result</th>
                                         </tr>
@@ -98,7 +98,7 @@
                                     <tbody>
                                       {{range $index, $element := .AvCaesorAVEngineResult}}
                                         <tr>
-                                          <td class="gtextblk"> {{$index}}</td>
+                                          <td class="gtextalice"> {{$index}}</td>
                                           <td class="gtext">{{$element}}</td>
                                         </tr>
                                       {{end}}
@@ -110,14 +110,14 @@
                         <div class="col-sm-4" id="Jotti">
                             <div class="panel panel-default">
                               <div class="panel-heading">
-                                <h4 class="panel-title gtext3">
+                                <h4 class="panel-title gtextcyan">
                                   <a data-toggle="collapse" href="#vtjotticollapse">Virusscan.Jotti</a>
                                 </h4>
                               </div>
                                <div id="vtjotticollapse" class="panel-collapse collapse show">
                                  <table class="table  ">
                                      <thead>
-                                       <tr>
+                                       <tr class="gtextalicehead">
                                          <th>AV Engine</th>
                                          <th>Result</th>
                                           </tr>
@@ -125,7 +125,7 @@
                                    <tbody>
                                      {{range $index, $element := .Jottiscanres}}
                                        <tr>
-                                         <td class="gtextblk"> {{$index}}</td>
+                                         <td class="gtextalice"> {{$index}}</td>
                                          <td class="gtext">{{$element}}</td>
                                        </tr>
                                      {{end}}
@@ -137,21 +137,21 @@
                        <div class="col-sm-4">
                           <div class="panel panel-default">
                               <div class="panel-heading">
-                                <h4 class="panel-title gtext3">
+                                <h4 class="panel-title gtextcyan">
                                   <a data-toggle="collapse" href="#Metadefendercollapse">Metadefender</a>
                                 </h4>
                               </div>
                                <div id="Metadefendercollapse" class="panel-collapse collapse show">
                                  <table class="table  ">
                                      <thead>
-                                       <tr>
+                                       <tr class="gtextalicehead">
                                          <th>AV Engine</th>
                                          <th>Result</th>
                                      </tr>
                                    </thead>
                                    {{range $index, $element := .MetaScanres}}
                                      <tr>
-                                       <td class="gtextblk"> {{$index}}</td>
+                                       <td class="gtextalice"> {{$index}}</td>
                                        <td class="gtext">{{$element}}</td>
                                      </tr>
                                    {{end}}
@@ -166,7 +166,7 @@
                         <div class="col-sm-8">
                           <div class="panel panel-default">
                             <div class="panel-heading">
-                              <h4 class="panel-title gtext3">
+                              <h4 class="panel-title gtextcyan">
                                 <a data-toggle="collapse" href="#commonadditionalfileinfocollapse">Additional file Information.</a>
                               </h4>
                             </div>
@@ -175,7 +175,7 @@
                                    <tbody>
                                    {{range $index, $element := .AvCaesorAVFileInfoResult}}
                                      <tr>
-                                       <td class="gtextblk"> {{$index}}</td>
+                                       <td class="gtextalice"> {{$index}}</td>
                                        <td class="gtextgreen">{{$element}}</td>
                                      </tr>
                                    {{end}}

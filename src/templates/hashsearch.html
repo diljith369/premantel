@@ -83,14 +83,14 @@
                    <div class="container" style="width:100%" >
                        <div class="panel panel-default">
                          <div class="panel-heading">
-                           <h4 class="panel-title gtext3">
+                           <h4 class="panel-title gtextcyan">
                              <a data-toggle="collapse" href="#vtcollapse">Virus Total</a>
                            </h4>
                          </div>
                           <div id="vtcollapse" class="panel-collapse collapse show">
                             <table class="table  ">
                                 <thead>
-                                  <tr>
+                                  <tr class="gtextalicehead">
                                     <th>AV Engine</th>
                                     <th>Result</th>
                                   </tr>
@@ -98,7 +98,7 @@
                                 <tbody>
                                   {{range $index, $element := .Vtscanres}}
                                     <tr>
-                                      <td class="gtextblk">{{$index}}</td>
+                                      <td class="gtextalice">{{$index}}</td>
                                       <td class="gtext">{{$element}}</td>
                                     </tr>
                                   {{end}}
@@ -112,7 +112,7 @@
                      <div class="container" style="width:100%" >
                          <div class="panel panel-default">
                            <div class="panel-heading">
-                             <h4 class="panel-title gtext3">
+                             <h4 class="panel-title gtextcyan">
                                <a data-toggle="collapse" href="#vtadditionalfileinfocollapse">Additional  file Information.</a>
                              </h4>
                            </div>
@@ -121,7 +121,7 @@
                                 <tbody>
                                   {{range $index, $element := .VtUploadedFileInfo}}
                                     <tr>
-                                      <td class="gtextblk">{{$index}}</td>
+                                      <td class="gtextalice">{{$index}}</td>
                                       <td class="gtextgreen">{{$element}}</td>
                                     </tr>
                                   {{end}}
@@ -139,7 +139,7 @@
                   <div class="container" style="width:100%" >
                       <div class="panel panel-default">
                         <div class="panel-heading">
-                          <h4 class="panel-title gtext3">
+                          <h4 class="panel-title gtextcyan">
                             <a data-toggle="collapse" href="#IBMxForceExchange">IBMxForceExchange</a>
                           </h4>
                         </div>
@@ -148,7 +148,7 @@
                               <tbody>
                                  {{range $index, $element := .IBMxForceMalwareReport}}
                                    <tr>
-                                     <td class="gtextblk">{{$index}}</td>
+                                     <td class="gtextalice">{{$index}}</td>
                                      <td class="gtext">{{$element}}</td>
                                    </tr>
                                  {{end}}
@@ -162,14 +162,14 @@
                   <div class="container" style="width:100%" >
                       <div class="panel panel-default">
                         <div class="panel-heading">
-                          <h4 class="panel-title gtext3">
+                          <h4 class="panel-title gtextcyan">
                             <a data-toggle="collapse" href="#shadowservercollapse">ShadowServer</a>
                           </h4>
                         </div>
                          <div id="shadowservercollapse" class="panel-collapse collapse show">
                            <table class="table  ">
                                <thead>
-                                 <tr>
+                                 <tr class="gtextalicehead">
                                    <th>AV Engine</th>
                                    <th>Result</th>
                                  </tr>
@@ -177,7 +177,7 @@
                                <tbody>
                                  {{range $index, $element := .ShadowServer}}
                                    <tr>
-                                     <td class="gtextblk">{{$index}}</td>
+                                     <td class="gtextalice">{{$index}}</td>
                                      <td class="gtext">{{$element}}</td>
                                    </tr>
                                  {{end}}
@@ -195,14 +195,14 @@
                     <div class="container" style="width:100%" >
                         <div class="panel panel-default">
                           <div class="panel-heading">
-                            <h4 class="panel-title gtext3">
+                            <h4 class="panel-title gtextcyan">
                               <a data-toggle="collapse" href="#GoogleSafeBrowsecollapse">GoogleSafeBrowse</a>
                             </h4>
                           </div>
                            <div id="GoogleSafeBrowsecollapse" class="panel-collapse collapse show">
                              <table class="table">
                                  <thead>
-                                   <tr>
+                                   <tr class="gtextalicehead">
                                      <th>Threat Type</th>
                                      <th>Platform</th>
                                      <th>URL</th>
@@ -226,14 +226,14 @@
                    <div class="container" style="width:100%" >
                        <div class="panel panel-default">
                          <div class="panel-heading">
-                           <h4 class="panel-title gtext3">
+                           <h4 class="panel-title gtextcyan">
                              <a data-toggle="collapse" href="#Urlquerynetcollapse">Urlquery.net</a>
                            </h4>
                          </div>
                          <div id="Urlquerynetcollapse" class="panel-collapse collapse show">
                             <table class="table  ">
                                 <thead>
-                                  <tr>
+                                  <tr class="gtextalicehead">
                                     <th>Source</th>
                                     <th>Result</th>
                                   </tr>
@@ -241,7 +241,7 @@
                                 <tbody>
                                   {{range $index, $element := .Urlquerynetsearch}}
                                   <tr>
-                                    <td class="gtextblk">{{$index}}</td>
+                                    <td class="gtextalice">{{$index}}</td>
                                      <td class="gtext">{{$element}}</td>
                                     </tr>
                                   {{end}}

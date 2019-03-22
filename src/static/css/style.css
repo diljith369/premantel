@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #D1D0CE;
+    background: #413839;
 }
 
 
@@ -15,7 +15,7 @@ p {
     font-size: 1.1em;
     font-weight: 300;
     line-height: 1.7em;
-    color: #999;
+    color:cyan;
 }
 
 a, a:hover, a:focus {
@@ -63,26 +63,40 @@ a, a:hover, a:focus {
     font-size: 90%;
    }
   
-  .gtext3 {
-    color: #00A9F;
-    text-shadow: 0px 1px 0px #00A9F;
+  .gtextcyan {
+    color :deepskyblue;
+    text-shadow: 0px 1px 0px black;
     font-size: 90%;
+    font-weight: bolder
    }
   
+   .gtextalice {
+    color:aliceblue;
+    text-shadow: 0px 1px 0px black;
+    font-size: 75%;
+   }
+
+   .gtextalicehead {
+    color:aliceblue;
+    text-shadow: 0px 1px 0px black;
+    font-weight: bolder;
+    font-size: 90%;
+   }
+
    .gtextblk {
     color:black;
     text-shadow: 0px 1px 0px black;
     font-size: 75%;
    }
   .gtextgreen {
-    color: black;
+    color: wheat;
     text-shadow: 0px 1px 0px black;
     font-size: 75%;
    }
   
   .gtext {
   color: #FF0000;
-  text-shadow: 0px 1px 0px #FF0000;
+  text-shadow: 0px 1px 0px #413839;
   font-size: 75%;
   }
 
@@ -93,7 +107,7 @@ a, a:hover, a:focus {
     min-width: 250px;
     max-width: 250px;
     background: #413839;
-    color: #fff;
+    color: aliceblue;
     transition: all 0.6s cubic-bezier(0.945, 0.020, 0.270, 0.665);
     transform-origin: bottom left;
 }
@@ -105,6 +119,8 @@ a, a:hover, a:focus {
 
 #sidebar .sidebar-header {
     padding: 20px;
+    color: deepskyblue;
+
     background: #413839;
 }
 

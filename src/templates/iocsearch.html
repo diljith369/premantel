@@ -80,7 +80,7 @@
 		    		<div class="col-sm-6">
                 <div class="panel panel-default">
                   <div class="panel-heading">
-                    <h4 class="panel-title gtext3">
+                    <h4 class="panel-title gtextcyan">
                       <a data-toggle="collapse" href="#Cymoncollapse">Cymon IO</a>
                     </h4>
                   </div>
@@ -96,27 +96,27 @@
                                    <tbody>
                                      {{range $index, $element := .CymonIpInfo}}
                                        <tr>
-                                         <td class="gtextblk">Title</td>
+                                         <td class="gtextalice">Title</td>
                                          <td class="gtext"> {{$element.Title}}</td>
-                                         <td class="gtextblk">Description</td>
+                                         <td class="gtextalice">Description</td>
                                           <td class="gtext"> {{$element.Description}}</td>
                                        </tr>
                                        <tr>
-                                         <td class="gtextblk">ReportedBy</td>
+                                         <td class="gtextalice">ReportedBy</td>
                                          <td class="gtext"> {{$element.ReportedBy}}</td>
-                                         <td class="gtextblk">URL</td>
+                                         <td class="gtextalice">URL</td>
                                          <td class="gtext"> {{$element.URL}}</td>
                                       </tr>
                                        <tr>
-                                         <td class="gtextblk">Domain/IP</td>
+                                         <td class="gtextalice">Domain/IP</td>
                                          <td class="gtext"> {{$element.Domain}}/{{$element.IP}}</td>
-                                         <td class="gtextblk">Hostname</td>
+                                         <td class="gtextalice">Hostname</td>
                                          <td class="gtext"> {{$element.Hostname}}</td>
                                        </tr>
                                         <tr>
-                                          <td class="gtextblk">Country</td>
+                                          <td class="gtextalice">Country</td>
                                           <td class="gtext"> {{$element.Country}}</td>
-                                          <td class="gtextblk">City</td>
+                                          <td class="gtextalice">City</td>
                                          <td class="gtext"> {{$element.City}}</td>
                                        </tr>
 
@@ -129,7 +129,7 @@
              <div class="col-sm-6">
                 <div class="panel panel-default">
                   <div class="panel-heading">
-                    <h4 class="panel-title gtext3">
+                    <h4 class="panel-title gtextcyan">
                       <a data-toggle="collapse" href="#IBMxForceIPcollapse">IBMxForceExchange IP Report</a>
                     </h4>
                   </div>
@@ -139,28 +139,28 @@
                              <tbody>
                                {{range $index, $element := .IBMxFroceIPReport}}
                                  <tr>
-                                   <td class="gtextblk">Created Date</td>
+                                   <td class="gtextalice">Created Date</td>
                                    <td class="gtext"> {{$element.CreatedDate}}</td>
-                                   <td class="gtextblk">Company</td>
+                                   <td class="gtextalice">Company</td>
                                    <td class="gtext"> {{$element.Company}}</td>
   
                                  </tr>
                                  <tr>
-                                   <td class="gtextblk">IP</td>
+                                   <td class="gtextalice">IP</td>
                                    <td class="gtext"> {{$element.IP}}</td>
-                                   <td class="gtextblk">Country</td>
+                                   <td class="gtextalice">Country</td>
                                    <td class="gtext"> {{$element.Country}}</td>
                                 </tr>
                                  <tr>
-                                   <td class="gtextblk">CategoryDescripton</td>
+                                   <td class="gtextalice">CategoryDescripton</td>
                                    <td class="gtext"> {{$element.CategoryDescripton}}</td>
-                                   <td class="gtextblk">CategoryType</td>
+                                   <td class="gtextalice">CategoryType</td>
                                    <td class="gtext"> {{$element.CategoryType}}</td>
                                  </tr>
                                   <tr>
-                                    <td class="gtextblk">Reason</td>
+                                    <td class="gtextalice">Reason</td>
                                      <td class="gtext"> {{$element.Reason}}</td>
-                                    <td class="gtextblk">ReasonDescription</td>
+                                    <td class="gtextalice">ReasonDescription</td>
                                    <td class="gtext"> {{$element.ReasonDescription}}</td>
                                  </tr>
                                {{end}}
@@ -175,7 +175,7 @@
               <div class="col-sm-4">
                 <div class="panel panel-default">
                   <div class="panel-heading">
-                    <h4 class="panel-title gtext3">
+                    <h4 class="panel-title gtextcyan">
                       <a data-toggle="collapse" href="#ShodanResult">Shodan IP Report</a>
                     </h4>
                   </div>
@@ -185,7 +185,7 @@
                              <tbody>
                                {{range $index, $element := .ShodanResult}}
                                  <tr>
-                                  <td class="gtextblk"> {{$index}}</td>
+                                  <td class="gtextalice"> {{$index}}</td>
                                   <td class="gtext">{{$element}}</td>    
                                  </tr>
                                {{end}}
@@ -198,7 +198,7 @@
                 <div class="col-sm-4">
                   <div class="panel panel-default">
                     <div class="panel-heading">
-                      <h4 class="panel-title gtext3">
+                      <h4 class="panel-title gtextcyan">
                         <a data-toggle="collapse" href="#commonfeeds">Common Feeds Analysis.</a>
                       </h4>
                     </div>
@@ -207,7 +207,7 @@
                            <tbody>
                            {{range $index, $element := .CommonFeeds}}
                              <tr>
-                               <td class="gtextblk"> {{$index}}</td>
+                               <td class="gtextalice"> {{$index}}</td>
                                <td class="gtext">{{$element}}</td>
                              </tr>
                            {{end}}
@@ -219,7 +219,7 @@
                 <div class="col-sm-4">
                   <div class="panel panel-default">
                     <div class="panel-heading">
-                      <h4 class="panel-title gtext3">
+                      <h4 class="panel-title gtextcyan">
                         <a data-toggle="collapse" href="#Cybercure">Cybercure IP Report.</a>
                       </h4>
                     </div>
@@ -228,7 +228,7 @@
                            <tbody>
                            {{range $index, $element := .CybercureResult}}
                              <tr>
-                               <td class="gtextblk"> {{$index}}</td>
+                               <td class="gtextalice"> {{$index}}</td>
                                <td class="gtext">{{$element}}</td>
                              </tr>
                            {{end}}
